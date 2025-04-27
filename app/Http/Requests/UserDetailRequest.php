@@ -25,6 +25,7 @@ class UserDetailRequest extends FormRequest
      */
     public function rules(): array
     {
+        error_log("hey");
         return [
             'name' => 'required|string|max:255',
             'height' => 'required|numeric',
@@ -35,7 +36,7 @@ class UserDetailRequest extends FormRequest
             'gender' => ['required', Rule::enum(Gender::class)],
             'activity' => ['required', Rule::enum(Activity::class)],
             'goal' => ['required', Rule::enum(Goal::class)],
-            'user_id' => 'required|exists:users,id'
+            'user_id' => 'required|exists:users,id|unique:user_details'
         ];
     }
 
