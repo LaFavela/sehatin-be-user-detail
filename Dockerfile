@@ -46,6 +46,9 @@ RUN chown -R www-data:www-data /var/www/html \
 # Install Laravel dependencies
 RUN composer install --optimize-autoloader --no-dev
 
+# Run Octane Install
+RUN php artisan octane:install --server=swoole
+
 # Octane setup (if not done yet)
 RUN php artisan config:clear \
     && php artisan config:cache \
@@ -53,6 +56,3 @@ RUN php artisan config:clear \
 
 # Expose Octane port
 EXPOSE 8000
-
-# Start Laravel Octane using Swoole
-CMD ["php", "artisan", "octane:start", "--server=swoole", "--host=0.0.0.0", "--port=8000"]
