@@ -25,7 +25,6 @@ class UserDetailRequest extends FormRequest
      */
     public function rules(): array
     {
-        error_log("hey");
         return [
             'name' => 'required|string|max:255',
             'height' => 'required|numeric',
