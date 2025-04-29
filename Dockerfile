@@ -22,6 +22,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     libzip-dev \
     librabbitmq-dev \
+    nodejs \
+    npm \
     && docker-php-ext-configure zip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd mbstring pdo pdo_mysql xml bcmath zip pcntl sockets
@@ -45,6 +47,9 @@ RUN chown -R www-data:www-data /var/www/html \
 
 # Install Laravel dependencies
 RUN composer install --optimize-autoloader --no-dev
+
+# Install npm dependencies
+RUN npm install --save-dev chokidar
 
 # Run Octane Install
 RUN php artisan octane:install --server=swoole
