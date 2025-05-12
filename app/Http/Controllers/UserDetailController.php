@@ -76,7 +76,7 @@ class UserDetailController
             if ($role == 'admin') {
                 $user = UserDetail::find($id);
             } else {
-                $user = UserDetail::where('user_id', $userId)->find($id);
+                $user = UserDetail::where('user_id', $userId);
             }
 
             if (!$user) {
@@ -106,11 +106,10 @@ class UserDetailController
                 return (new MessageResource(null, false, 'Validation failed', 'field: [user_id] doesn\'t match session User ID'))->response()->setStatusCode(400);
             }
 
-            $response = Http::get("http://user-service.default.svc.cluster.local:8000/api/users/" . $userId)
-                ->header([
-                    'X-User-Role' => $role,
-                    'X-User-ID' => $userId,
-                ]);
+            $response = Http::withHeaders([
+                'X-User-Role' => $role,
+                'X-User-ID' => $userId,
+            ])->get("http://user-service.default.svc.cluster.local:8000/api/users/" . $userId);
 
             if ($response->notFound()) {
                 return (new MessageResource(null, false, 'User not found'))->response()->setStatusCode(404);
